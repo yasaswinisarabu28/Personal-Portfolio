@@ -1,24 +1,19 @@
-// ===== DOM Elements =====
+
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 const themeToggle = document.querySelector('.theme-toggle');
 const themeIcon = document.getElementById('theme-icon');
 const scrollTopBtn = document.querySelector('.scroll-top');
-
-// ===== Typing Animation =====
 const typingText = document.getElementById('typing-text');
 const textArray = ['Frontend Web Developer', 'Problem Solver'];
 let textIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
 let typingSpeed = 100;
-
 function typeText() {
     if (!typingText) return;
-
     const currentText = textArray[textIndex];
-    
     if (isDeleting) {
         typingText.textContent = currentText.substring(0, charIndex - 1);
         charIndex--;
@@ -28,39 +23,32 @@ function typeText() {
         charIndex++;
         typingSpeed = 100;
     }
-
     if (!isDeleting && charIndex === currentText.length) {
-        typingSpeed = 2000; // Pause at end
+        typingSpeed = 2000;
         isDeleting = true;
     } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         textIndex = (textIndex + 1) % textArray.length;
-        typingSpeed = 500; // Pause before next word
+        typingSpeed = 500; 
     }
 
     setTimeout(typeText, typingSpeed);
 }
 
-// ===== Mobile Navigation =====
 function toggleMobileMenu() {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 }
-
 function closeMobileMenu() {
     hamburger.classList.remove('active');
     navMenu.classList.remove('active');
 }
 
-// ===== Dark Mode Toggle =====
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    
-    // Update icon
     if (newTheme === 'dark') {
         themeIcon.classList.remove('fa-moon');
         themeIcon.classList.add('fa-sun');
@@ -69,8 +57,6 @@ function toggleTheme() {
         themeIcon.classList.add('fa-moon');
     }
 }
-
-// Initialize theme from localStorage
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -80,8 +66,6 @@ function initTheme() {
         themeIcon.classList.add('fa-sun');
     }
 }
-
-// ===== Scroll to Top Button =====
 function toggleScrollTop() {
     if (window.scrollY > 300) {
         scrollTopBtn.classList.add('active');
@@ -96,15 +80,13 @@ function scrollToTop() {
         behavior: 'smooth'
     });
 }
-
-// ===== Smooth Scrolling for Navigation Links =====
 function smoothScroll(e) {
     e.preventDefault();
     const targetId = this.getAttribute('href');
     const targetSection = document.querySelector(targetId);
     
     if (targetSection) {
-        const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
+        const offsetTop = targetSection.offsetTop - 70; 
         window.scrollTo({
             top: offsetTop,
             behavior: 'smooth'
@@ -112,8 +94,6 @@ function smoothScroll(e) {
         closeMobileMenu();
     }
 }
-
-// ===== Active Navigation Link =====
 function setActiveNavLink() {
     const sections = document.querySelectorAll('section');
     const scrollY = window.scrollY;
@@ -133,16 +113,10 @@ function setActiveNavLink() {
         }
     });
 }
-
-
-// ===== Notification System =====
 function showNotification(message, type) {
-    // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
-    
-    // Style the notification
     notification.style.cssText = `
         position: fixed;
         top: 20px;
@@ -156,7 +130,6 @@ function showNotification(message, type) {
         transition: transform 0.3s ease;
         max-width: 300px;
     `;
-    
     if (type === 'success') {
         notification.style.background = 'linear-gradient(135deg, #00b09b, #96c93d)';
     } else if (type === 'error') {
@@ -164,13 +137,9 @@ function showNotification(message, type) {
     }
     
     document.body.appendChild(notification);
-    
-    // Animate in
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
-    
-    // Remove after 3 seconds
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
@@ -178,8 +147,6 @@ function showNotification(message, type) {
         }, 300);
     }, 3000);
 }
-
-// ===== Intersection Observer for Animations =====
 function setupIntersectionObserver() {
     const observerOptions = {
         threshold: 0.1,
@@ -190,13 +157,9 @@ function setupIntersectionObserver() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                
-                            }
+                entry.target.style.transform = 'translateY(0)';                    }
         });
     }, observerOptions);
-
-    // Observe elements for animation
     const animatedElements = document.querySelectorAll('.about, .skills, .projects, .certifications, .contact');
     animatedElements.forEach(el => {
         el.style.opacity = '0';
@@ -205,9 +168,6 @@ function setupIntersectionObserver() {
         observer.observe(el);
     });
 }
-
-
-// ===== Create Scroll to Top Button =====
 function createScrollTopButton() {
     if (!scrollTopBtn) {
         const button = document.createElement('button');
@@ -217,13 +177,10 @@ function createScrollTopButton() {
         document.body.appendChild(button);
     }
 }
-
-// ===== Unified Dynamic Modal & Gallery System =====
 function setupDynamicGallery() {
     const galleryTriggers = document.querySelectorAll('.view-gallery');
     const modal = document.getElementById('project-modal');
     if (!modal) return;
-
     const overlay = modal.querySelector('.modal-overlay');
     const closeBtn = modal.querySelector('.modal-close');
     const modalTitle = document.getElementById('modal-title');
@@ -237,8 +194,6 @@ function setupDynamicGallery() {
 
     function showSlide(index) {
         if (totalSlides === 0) return;
-        
-        // Wrap index around
         if (index >= totalSlides) {
             currentSlide = 0;
         } else if (index < 0) {
@@ -249,8 +204,6 @@ function setupDynamicGallery() {
 
         const slides = slidesContainer.querySelectorAll('.carousel-slide');
         const dots = dotsContainer.querySelectorAll('.carousel-dot');
-
-        // Update slides active class
         slides.forEach((slide, i) => {
             if (i === currentSlide) {
                 slide.classList.add('active');
@@ -258,8 +211,6 @@ function setupDynamicGallery() {
                 slide.classList.remove('active');
             }
         });
-
-        // Update dots active class
         dots.forEach((dot, i) => {
             if (i === currentSlide) {
                 dot.classList.add('active');
@@ -272,19 +223,13 @@ function setupDynamicGallery() {
     function openModal(e) {
         e.preventDefault();
         const trigger = e.currentTarget;
-        
-        // Extract data
         const title = trigger.getAttribute('data-title') || 'Details';
         const folder = trigger.getAttribute('data-folder') || '';
         const filesString = trigger.getAttribute('data-files') || '';
         const files = filesString.split(',').map(f => f.trim()).filter(f => f.length > 0);
 
         if (files.length === 0) return;
-
-        // Set title
         modalTitle.textContent = title;
-
-        // Build slides and dots dynamically
         slidesContainer.innerHTML = '';
         dotsContainer.innerHTML = '';
         totalSlides = files.length;
@@ -293,13 +238,10 @@ function setupDynamicGallery() {
         files.forEach((file, index) => {
             const fileUrl = folder ? `${folder}/${file}` : file;
             const isPdf = file.toLowerCase().endsWith('.pdf');
-            
-            // Create slide element
             const slideDiv = document.createElement('div');
             slideDiv.className = `carousel-slide${index === 0 ? ' active' : ''}`;
             
             if (isPdf) {
-                // Render PDF inside an iframe with toolbar hidden
                 const iframe = document.createElement('iframe');
                 iframe.src = `${fileUrl}#toolbar=0&navpanes=0`;
                 iframe.style.width = '100%';
@@ -308,58 +250,44 @@ function setupDynamicGallery() {
                 iframe.style.borderRadius = '8px';
                 slideDiv.appendChild(iframe);
             } else {
-                // Render image
                 const img = document.createElement('img');
                 img.src = fileUrl;
                 img.alt = `${title} - Screenshot ${index + 1}`;
                 slideDiv.appendChild(img);
             }
             slidesContainer.appendChild(slideDiv);
-
-            // Create dot indicator
             const dotSpan = document.createElement('span');
             dotSpan.className = `carousel-dot${index === 0 ? ' active' : ''}`;
             dotSpan.setAttribute('data-index', index);
             dotSpan.addEventListener('click', () => showSlide(index));
             dotsContainer.appendChild(dotSpan);
         });
-
-        // Show modal with transition
         modal.style.display = 'flex';
         setTimeout(() => {
             modal.classList.add('active');
         }, 10);
-        document.body.style.overflow = 'hidden'; // Lock scroll
+        document.body.style.overflow = 'hidden'; 
         showSlide(0);
     }
 
     function closeModal() {
         modal.classList.remove('active');
-        document.body.style.overflow = ''; // Unlock scroll
+        document.body.style.overflow = '';
         setTimeout(() => {
             modal.style.display = 'none';
-            // Clear content to free resources and stop background processes
             slidesContainer.innerHTML = '';
             dotsContainer.innerHTML = '';
-        }, 400); // Match CSS transition duration
+        }, 400); 
     }
-
-    // Attach trigger listeners
     galleryTriggers.forEach(trigger => {
         trigger.addEventListener('click', openModal);
     });
-
-    // Control event listeners
     overlay.addEventListener('click', closeModal);
     closeBtn.addEventListener('click', closeModal);
-
     prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
     nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
-
-    // Keyboard controls
     document.addEventListener('keydown', (e) => {
         if (!modal.classList.contains('active')) return;
-        
         if (e.key === 'Escape') {
             closeModal();
         } else if (e.key === 'ArrowRight') {
@@ -369,59 +297,40 @@ function setupDynamicGallery() {
         }
     });
 }
-
-// ===== Event Listeners =====
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize everything
     initTheme();
     typeText();
     createScrollTopButton();
     setupIntersectionObserver();
     setupDynamicGallery();
-    
-    // Mobile menu
     if (hamburger) {
         hamburger.addEventListener('click', toggleMobileMenu);
     }
-    
-    // Navigation links
     navLinks.forEach(link => {
         link.addEventListener('click', smoothScroll);
     });
-    
-    // Theme toggle
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
     }
-    
-    // Scroll events
     window.addEventListener('scroll', () => {
         toggleScrollTop();
         setActiveNavLink();
     });
-    
-    // Contact form (safeguarded against reference errors)
     const contactForm = document.querySelector('.contact-form');
     if (contactForm && typeof handleContactForm === 'function') {
         contactForm.addEventListener('submit', handleContactForm);
     }
-    
-    // Close mobile menu when clicking outside
     document.addEventListener('click', (e) => {
         if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
             closeMobileMenu();
         }
     });
 });
-
-// ===== Window Resize Handler =====
 window.addEventListener('resize', () => {
     if (window.innerWidth > 768) {
         closeMobileMenu();
     }
 });
-
-// ===== Prevent Form Resubmission on Page Refresh =====
 if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
 }
